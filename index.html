@@ -9,486 +9,338 @@
 <meta name="apple-mobile-web-app-title" content="Rise & Earn">
 <meta name="theme-color" content="#0a0a0a">
 <title>Rise & Earn 💰</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 :root{
-  --bg:#0a0a0a;--card:#111;--card2:#1a1a1a;--border:#222;
-  --green:#00c853;--green2:#00e676;--red:#ff1744;--yellow:#ffd600;
-  --blue:#2979ff;--purple:#d500f9;--orange:#ff6d00;--gold:#ffc400;
-  --white:#fff;--gray:#888;--dim:#1e1e1e;
+  --bg:#080808;--card:#111;--card2:#161616;--border:#1e1e1e;
+  --green:#00e676;--red:#ff1744;--yellow:#ffd600;--blue:#448aff;
+  --purple:#e040fb;--orange:#ff6d00;--gold:#ffc400;--teal:#1de9b6;
+  --white:#f5f5f5;--gray:#666;--dim:#1a1a1a;
 }
-body{background:var(--bg);color:var(--white);font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display',sans-serif;min-height:100vh;padding-bottom:70px;overflow-x:hidden}
-
-/* NAV */
-.nav{position:fixed;bottom:0;left:0;right:0;background:#111;border-top:1px solid #222;display:flex;z-index:100;padding-bottom:env(safe-area-inset-bottom)}
-.nb{flex:1;display:flex;flex-direction:column;align-items:center;padding:10px 0 6px;border:none;background:none;cursor:pointer;font-family:inherit;gap:3px}
-.ni{font-size:22px}
-.nl{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.5px}
-
-/* PAGES */
-.pg{display:none;padding:0 14px 20px;animation:fadeIn .2s ease}
-.pg.on{display:block}
-@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-
-/* HEADER */
-.hdr{padding:16px 14px 0;display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
-.htitle{font-size:22px;font-weight:800;font-style:italic}
-.hday{font-size:11px;color:var(–gray);margin-top:2px}
-.hbadge{font-size:11px;font-weight:700;padding:4px 10px;border-radius:20px}
-
-/* CARDS */
-.card{background:var(–card);border:1px solid var(–border);border-radius:16px;padding:16px;margin-bottom:12px}
-.card2{background:var(–card2);border-radius:12px;padding:14px;margin-bottom:10px}
-
-/* BIG NUMBER */
-.bignum{font-size:42px;font-weight:800;letter-spacing:-1px;line-height:1}
-.bignumsm{font-size:28px;font-weight:800;letter-spacing:-.5px}
-.lbl{font-size:10px;color:var(–gray);font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
-.sublbl{font-size:11px;color:var(–gray);margin-top:4px}
-
-/* PROGRESS */
-.pbar{background:#1e1e1e;border-radius:100px;overflow:hidden}
-.pfill{border-radius:100px;transition:width 1s cubic-bezier(.4,0,.2,1)}
-
-/* GRID */
-.g2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
-
-/* STAT BOX */
-.sbox{background:var(–card2);border-radius:12px;padding:12px;text-align:center}
-.sbox .lbl{margin-bottom:4px}
-.sbox .val{font-size:16px;font-weight:800}
-
-/* ENTRY ROW */
-.erow{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid #1a1a1a}
+body{background:var(--bg);color:var(--white);font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display',sans-serif;min-height:100vh;padding-bottom:72px}
+.nav{position:fixed;bottom:0;left:0;right:0;background:#0d0d0d;border-top:1px solid #1a1a1a;display:flex;z-index:100;padding-bottom:env(safe-area-inset-bottom,10px)}
+.nb{flex:1;display:flex;flex-direction:column;align-items:center;padding:9px 0 5px;border:none;background:none;cursor:pointer;font-family:inherit;gap:2px}
+.ni{font-size:20px}
+.nl{font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--gray)}
+.nb.on .nl{color:var(--green)}
+.pg{display:none;padding:12px 14px 24px}
+.pg.on{display:block;animation:fadeIn .25s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px;margin-bottom:10px}
+.card2{background:var(--card2);border-radius:10px;padding:12px;margin-bottom:8px}
+.lbl{font-size:9px;color:var(--gray);font-weight:700;text-transform:uppercase;letter-spacing:1.2px;margin-bottom:5px}
+.bignum{font-size:38px;font-weight:800;letter-spacing:-1px;line-height:1.1}
+.num{font-size:20px;font-weight:800;letter-spacing:-.5px}
+.sub{font-size:10px;color:var(--gray);margin-top:3px}
+.pbar{background:#1a1a1a;border-radius:100px;overflow:hidden}
+.pfill{border-radius:100px;transition:width .9s cubic-bezier(.4,0,.2,1)}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:10px}
+.sbox{background:var(--card2);border-radius:10px;padding:10px;text-align:center}
+.sbox .lbl{margin-bottom:3px}
+.sbox .val{font-size:15px;font-weight:800}
+.motiv{border-radius:14px;padding:16px;margin-bottom:10px;position:relative;overflow:hidden}
+.motiv::before{content:'';position:absolute;right:-30px;top:-30px;width:120px;height:120px;background:rgba(255,255,255,.04);border-radius:50%}
+.motiv::after{content:'';position:absolute;left:-20px;bottom:-20px;width:80px;height:80px;background:rgba(255,255,255,.03);border-radius:50%}
+.erow{display:flex;align-items:center;padding:10px 0;border-bottom:1px solid #161616}
 .erow:last-child{border-bottom:none}
-.eicon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.eicon{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
 .einfo{flex:1;margin:0 10px}
-.ename{font-size:13px;font-weight:600}
-.etime{font-size:10px;color:var(–gray)}
-.eamt{font-size:15px;font-weight:800}
-
-/* LOG FORM */
-.finput{width:100%;background:#1a1a1a;border:1px solid #2a2a2a;border-radius:10px;padding:12px 14px;color:var(–white);font-size:15px;font-family:inherit;outline:none;margin-bottom:10px}
-.finput:focus{border-color:var(–green)}
-.flbl{font-size:10px;color:var(–gray);font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:5px;display:block}
-.tbtn{padding:10px 8px;border-radius:10px;border:1px solid #2a2a2a;background:transparent;color:var(–gray);font-size:11px;cursor:pointer;font-family:inherit;font-weight:700;transition:all .15s;text-align:center}
-.cbtn{padding:6px 12px;border-radius:20px;border:1px solid #2a2a2a;background:transparent;color:var(–gray);font-size:10px;cursor:pointer;font-family:inherit;font-weight:600;margin:3px}
-.savebtn{width:100%;padding:15px;border-radius:12px;border:none;font-size:15px;font-weight:800;cursor:pointer;font-family:inherit;margin-top:6px;letter-spacing:.3px}
-.delbtn{background:none;border:none;color:#333;cursor:pointer;font-size:11px;padding:0}
-
-/* MOTIVATE */
-.motiv{background:linear-gradient(135deg,#00c853,#00897b);border-radius:16px;padding:18px;margin-bottom:12px;position:relative;overflow:hidden}
-.motiv::after{content:’’;position:absolute;right:-20px;top:-20px;width:100px;height:100px;background:rgba(255,255,255,.05);border-radius:50%}
-.motiv-text{font-size:16px;font-weight:700;line-height:1.4}
-.motiv-sub{font-size:11px;opacity:.8;margin-top:4px}
-
-/* RING */
-.ring-wrap{display:flex;justify-content:center;align-items:center;margin:10px 0}
-svg.ring{transform:rotate(-90deg)}
-.ring-text{position:absolute;text-align:center}
-
-/* SAVINGS HIGHLIGHT */
-.savings-card{border-radius:16px;padding:18px;margin-bottom:12px;position:relative;overflow:hidden}
-
-/* WEEK DAY */
-.wday{display:flex;flex-direction:column;align-items:center;gap:4px}
-.wday-bar-bg{width:28px;height:80px;background:#1a1a1a;border-radius:8px;display:flex;align-items:flex-end;overflow:hidden}
-.wday-bar-fill{width:100%;border-radius:8px;transition:height .8s cubic-bezier(.4,0,.2,1)}
-.wday-lbl{font-size:9px;color:var(–gray);font-weight:700}
-.wday-amt{font-size:9px;font-weight:700}
-
-/* TOAST */
-.toast{position:fixed;top:20px;left:50%;transform:translateX(-50%);padding:10px 20px;border-radius:10px;font-size:12px;font-weight:700;z-index:999;transition:opacity .3s;pointer-events:none;white-space:nowrap}
+.ename{font-size:12px;font-weight:600}
+.etime{font-size:9px;color:var(--gray);margin-top:1px}
+.eamt{font-size:14px;font-weight:800}
+.delbtn{background:none;border:none;color:#2a2a2a;cursor:pointer;font-size:10px;padding:0;display:block;margin-top:1px}
+.finput{width:100%;background:#161616;border:1px solid #222;border-radius:10px;padding:11px 13px;color:var(--white);font-size:14px;font-family:inherit;outline:none;margin-bottom:8px}
+.finput:focus{border-color:var(--green)}
+.flbl{font-size:9px;color:var(--gray);font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;display:block}
+.tgrid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:10px}
+.tbtn{padding:10px 6px;border-radius:10px;border:1px solid #222;background:transparent;color:var(--gray);font-size:10px;cursor:pointer;font-family:inherit;font-weight:700;transition:all .15s;text-align:center}
+.catgrid{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px}
+.cbtn{padding:5px 10px;border-radius:16px;border:1px solid #222;background:transparent;color:var(--gray);font-size:9px;cursor:pointer;font-family:inherit;font-weight:600}
+.savebtn{width:100%;padding:14px;border-radius:12px;border:none;font-size:14px;font-weight:800;cursor:pointer;font-family:inherit;background:var(--green);color:#000;letter-spacing:.3px}
+.toast{position:fixed;top:18px;left:50%;transform:translateX(-50%);padding:9px 18px;border-radius:10px;font-size:11px;font-weight:700;z-index:999;transition:opacity .3s;pointer-events:none;white-space:nowrap;color:#000}
+.chart-wrap{position:relative;height:200px;margin-top:8px}
+.tip-card{border-radius:12px;padding:12px;margin-bottom:8px;border-left:3px solid}
 </style>
-
 </head>
 <body>
 
-<!-- PAGE: TODAY -->
+<!-- ══ TODAY PAGE ══ -->
 
 <div id="p-today" class="pg on">
-  <div class="hdr">
+  <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px">
     <div>
-      <div class="htitle" style="color:var(--green)">RISE & EARN 💰</div>
-      <div class="hday" id="today-date"></div>
+      <div style="font-size:20px;font-weight:800;font-style:italic;color:var(--green)">RISE & EARN 💰</div>
+      <div style="font-size:10px;color:var(--gray);margin-top:1px" id="t-date"></div>
     </div>
-    <div class="hbadge" id="today-badge"></div>
+    <div id="t-badge" style="font-size:10px;font-weight:700;padding:4px 10px;border-radius:16px"></div>
   </div>
 
-  <!-- Motivational banner -->
+  <!-- Motivational -->
 
-  <div class="motiv" id="motiv-banner">
-    <div class="motiv-text" id="motiv-text">Every dollar counts. Keep pushing! 💪</div>
-    <div class="motiv-sub" id="motiv-sub">You're building your future today.</div>
+  <div class="motiv" id="t-motiv">
+    <div style="font-size:15px;font-weight:700;line-height:1.4" id="t-mot-text"></div>
+    <div style="font-size:10px;opacity:.7;margin-top:3px" id="t-mot-sub"></div>
   </div>
 
-  <!-- Today's big number -->
+  <!-- Today earned -->
 
   <div class="card">
-    <div style="display:flex;justify-content:space-between;align-items:flex-start">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px">
       <div>
         <div class="lbl">Earned Today</div>
-        <div class="bignum" id="today-earned" style="color:var(--green)">$0</div>
-        <div class="sublbl" id="today-target-sub"></div>
+        <div class="bignum" id="t-earned" style="color:var(--green)">$0</div>
+        <div class="sub" id="t-earned-sub"></div>
       </div>
       <div style="text-align:right">
-        <div class="lbl">Need More</div>
-        <div class="bignumsm" id="today-need" style="color:var(--yellow)">$0</div>
+        <div class="lbl">Still Need</div>
+        <div class="num" id="t-need" style="color:var(--yellow)">$0</div>
       </div>
     </div>
-    <div style="margin-top:14px">
-      <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--gray);margin-bottom:6px">
-        <span>Daily Progress</span><span id="today-pct-lbl">0%</span>
-      </div>
-      <div class="pbar" style="height:10px"><div class="pfill" id="today-pbar" style="height:10px"></div></div>
+    <div style="display:flex;justify-content:space-between;font-size:9px;color:var(--gray);margin-bottom:4px">
+      <span>Daily Target: $<span id="t-target-lbl"></span></span><span id="t-pct-lbl"></span>
     </div>
+    <div class="pbar" style="height:9px"><div class="pfill" id="t-pbar" style="height:9px"></div></div>
   </div>
 
-  <!-- Savings from expenses -->
+  <!-- Budget saving -->
 
-  <div class="card" id="savings-from-expenses">
-    <div class="lbl">💰 Saving from $3,200 Monthly Budget</div>
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px">
+  <div class="card" style="background:linear-gradient(135deg,#0d0d00,#111);border-color:#2a2500">
+    <div class="lbl" style="color:var(--gold)">💰 Saving from $3,200 Monthly Budget</div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin:6px 0 10px">
       <div>
-        <div class="bignumsm" id="saved-from-budget" style="color:var(--gold)">$0</div>
-        <div class="sublbl">saved vs budget today</div>
+        <div class="num" id="t-budget-saved" style="color:var(--gold)">$0</div>
+        <div class="sub">saved today vs daily budget</div>
       </div>
       <div style="text-align:right">
-        <div style="font-size:13px;font-weight:700;color:var(--gray)" id="budget-spent">Spent: $0</div>
-        <div style="font-size:11px;color:var(--gray)">Budget: $106.67/day</div>
+        <div style="font-size:12px;font-weight:700" id="t-spent-lbl">Spent: $0</div>
+        <div style="font-size:9px;color:var(--gray)">Budget: $106.67/day</div>
       </div>
     </div>
-    <div style="margin-top:10px">
-      <div class="pbar" style="height:7px"><div class="pfill" id="budget-pbar" style="height:7px;background:var(--gold)"></div></div>
-    </div>
+    <div class="pbar" style="height:6px"><div class="pfill" id="t-budget-bar" style="height:6px;background:var(--gold)"></div></div>
   </div>
 
-  <!-- Today's entries -->
+  <!-- Today entries -->
 
   <div class="card">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
       <div class="lbl" style="margin:0">Today's Entries</div>
-      <button onclick="go('log')" style="background:var(--green);border:none;border-radius:8px;padding:6px 12px;color:#000;font-size:11px;font-weight:800;cursor:pointer;font-family:inherit">+ ADD</button>
+      <button onclick="go('log')" style="background:var(--green);border:none;border-radius:7px;padding:5px 12px;color:#000;font-size:11px;font-weight:800;cursor:pointer;font-family:inherit">+ ADD</button>
     </div>
-    <div id="today-entries">
-      <div style="text-align:center;color:var(--gray);padding:20px;font-size:13px">No entries yet today 😊<br>Tap + ADD to log!</div>
-    </div>
+    <div id="t-entries"></div>
   </div>
 
-  <!-- Quick stats -->
+  <!-- Stats -->
 
   <div class="g2">
-    <div class="sbox">
-      <div class="lbl">True Position</div>
-      <div class="val" id="true-pos" style="color:var(--red)">-$3,000</div>
-    </div>
-    <div class="sbox">
-      <div class="lbl">Loan Left</div>
-      <div class="val" id="loan-left" style="color:var(--orange)">$3,000</div>
-    </div>
-    <div class="sbox">
-      <div class="lbl">Net Saved</div>
-      <div class="val" id="net-saved-sm" style="color:var(--green)">$0</div>
-    </div>
-    <div class="sbox">
-      <div class="lbl">Sadaqah</div>
-      <div class="val" id="sadaqah-sm" style="color:var(--gold)">$0</div>
-    </div>
+    <div class="sbox"><div class="lbl">True Position</div><div class="val" id="t-truepos">-$3,000</div></div>
+    <div class="sbox"><div class="lbl">Loan Left</div><div class="val" id="t-loan" style="color:var(--orange)">$3,000</div></div>
+    <div class="sbox"><div class="lbl">Total Saved</div><div class="val" id="t-saved" style="color:var(--green)">$0</div></div>
+    <div class="sbox"><div class="lbl">Sadaqah 🤲</div><div class="val" id="t-sad" style="color:var(--gold)">$0</div></div>
   </div>
 </div>
 
-<!-- PAGE: WEEK -->
+<!-- ══ WEEK PAGE ══ -->
 
 <div id="p-week" class="pg">
-  <div class="hdr">
-    <div>
-      <div class="htitle">This Week 📅</div>
-      <div class="hday" id="week-range"></div>
-    </div>
+  <div style="margin-bottom:12px">
+    <div style="font-size:18px;font-weight:800">This Week 📅</div>
+    <div style="font-size:10px;color:var(--gray)" id="w-range"></div>
   </div>
-
-  <!-- Week earned -->
-
   <div class="card">
     <div class="lbl">Total Earned This Week</div>
-    <div class="bignum" id="week-earned" style="color:var(--green)">$0</div>
-    <div class="sublbl" id="week-target-sub"></div>
-    <div style="margin-top:14px">
-      <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--gray);margin-bottom:6px">
-        <span>Week Target: $<span id="week-target-lbl">0</span></span>
-        <span id="week-pct-lbl">0%</span>
-      </div>
-      <div class="pbar" style="height:10px"><div class="pfill" id="week-pbar" style="height:10px"></div></div>
+    <div class="bignum" id="w-earned" style="color:var(--green)">$0</div>
+    <div class="sub" id="w-sub"></div>
+    <div style="display:flex;justify-content:space-between;font-size:9px;color:var(--gray);margin:10px 0 4px">
+      <span>Week Target: $<span id="w-target-lbl"></span></span><span id="w-pct-lbl"></span>
+    </div>
+    <div class="pbar" style="height:9px"><div class="pfill" id="w-pbar" style="height:9px"></div></div>
+  </div>
+  <div class="card" style="background:linear-gradient(135deg,#0d0d00,#111);border-color:#2a2500">
+    <div class="lbl" style="color:var(--gold)">💰 Budget Savings This Week</div>
+    <div style="display:flex;justify-content:space-between;margin-top:6px">
+      <div><div class="num" id="w-budget-saved" style="color:var(--gold)">$0</div><div class="sub">under $746/week budget</div></div>
+      <div style="text-align:right"><div style="font-size:13px;font-weight:700" id="w-exp-lbl">Spent: $0</div><div style="font-size:9px;color:var(--gray)">Budget: $746.67/wk</div></div>
     </div>
   </div>
-
-  <!-- Savings from $3200 this week -->
-
-  <div class="card" style="background:linear-gradient(135deg,#1a1a00,#111)">
-    <div class="lbl" style="color:var(--gold)">💰 Saved from $3,200 Budget This Week</div>
-    <div style="display:flex;justify-content:space-between;margin-top:8px">
-      <div>
-        <div class="bignumsm" id="week-budget-saved" style="color:var(--gold)">$0</div>
-        <div class="sublbl">under weekly budget</div>
-      </div>
-      <div style="text-align:right">
-        <div style="font-size:13px;font-weight:700" id="week-expenses-lbl">Spent: $0</div>
-        <div style="font-size:11px;color:var(--gray)">Budget: $746.67/wk</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Day by day bars -->
-
   <div class="card">
-    <div class="lbl">Daily Breakdown</div>
-    <div style="display:flex;justify-content:space-around;align-items:flex-end;padding:10px 0" id="week-bars"></div>
-    <div style="display:flex;justify-content:space-around;margin-top:8px" id="week-bar-amts"></div>
+    <div class="lbl">Day by Day</div>
+    <div style="display:flex;justify-content:space-around;align-items:flex-end;padding:8px 0;gap:4px" id="w-bars"></div>
   </div>
-
-  <!-- Week summary -->
-
   <div class="g2">
-    <div class="sbox">
-      <div class="lbl">Net Saved</div>
-      <div class="val" id="week-net" style="color:var(--green)">$0</div>
-    </div>
-    <div class="sbox">
-      <div class="lbl">Tax Paid</div>
-      <div class="val" id="week-tax" style="color:var(--red)">$0</div>
-    </div>
-    <div class="sbox">
-      <div class="lbl">Expenses</div>
-      <div class="val" id="week-exp" style="color:var(--red)">$0</div>
-    </div>
-    <div class="sbox">
-      <div class="lbl">Sadaqah</div>
-      <div class="val" id="week-sad" style="color:var(--gold)">$0</div>
-    </div>
+    <div class="sbox"><div class="lbl">Net Saved</div><div class="val" id="w-net" style="color:var(--green)">$0</div></div>
+    <div class="sbox"><div class="lbl">Tax Paid</div><div class="val" id="w-tax" style="color:var(--red)">$0</div></div>
+    <div class="sbox"><div class="lbl">Expenses</div><div class="val" id="w-exp" style="color:var(--red)">$0</div></div>
+    <div class="sbox"><div class="lbl">Sadaqah</div><div class="val" id="w-sad" style="color:var(--gold)">$0</div></div>
   </div>
 </div>
 
-<!-- PAGE: MONTH -->
+<!-- ══ MONTH PAGE ══ -->
 
 <div id="p-month" class="pg">
-  <div class="hdr">
-    <div>
-      <div class="htitle">This Month 🗓️</div>
-      <div class="hday" id="month-name"></div>
-    </div>
+  <div style="margin-bottom:12px">
+    <div style="font-size:18px;font-weight:800">This Month 🗓️</div>
+    <div style="font-size:10px;color:var(--gray)" id="m-name"></div>
   </div>
-
-  <!-- Month earned -->
-
   <div class="card">
-    <div class="lbl">Total Earned This Month</div>
-    <div class="bignum" id="month-earned" style="color:var(--green)">$0</div>
-    <div style="margin-top:14px">
-      <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--gray);margin-bottom:6px">
-        <span>Month Target: $<span id="month-target-lbl">0</span></span>
-        <span id="month-pct-lbl">0%</span>
-      </div>
-      <div class="pbar" style="height:10px"><div class="pfill" id="month-pbar" style="height:10px"></div></div>
+    <div class="lbl">Total Earned</div>
+    <div class="bignum" id="m-earned" style="color:var(--green)">$0</div>
+    <div style="display:flex;justify-content:space-between;font-size:9px;color:var(--gray);margin:10px 0 4px">
+      <span>Month Target: $<span id="m-target-lbl"></span></span><span id="m-pct-lbl"></span>
     </div>
+    <div class="pbar" style="height:9px"><div class="pfill" id="m-pbar" style="height:9px"></div></div>
   </div>
-
-  <!-- Savings from $3200 -->
-
-  <div class="card" style="background:linear-gradient(135deg,#1a1500,#111);border-color:#2a2000">
+  <div class="card" style="background:linear-gradient(135deg,#0d0d00,#111);border-color:#2a2500">
     <div class="lbl" style="color:var(--gold)">💰 Saved from $3,200 Monthly Budget</div>
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px">
-      <div>
-        <div class="bignum" id="month-budget-saved" style="color:var(--gold);font-size:32px">$0</div>
-        <div class="sublbl">saved vs $3,200 budget</div>
-      </div>
-      <div style="text-align:right">
-        <div style="font-size:22px;font-weight:800;color:var(--red)" id="month-exp-lbl">$0</div>
-        <div style="font-size:11px;color:var(--gray)">spent this month</div>
-      </div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin:8px 0 10px">
+      <div><div class="bignum" id="m-budget-saved" style="color:var(--gold);font-size:28px">$0</div><div class="sub">saved vs $3,200 budget</div></div>
+      <div style="text-align:right"><div class="num" id="m-exp-big" style="color:var(--red)">$0</div><div style="font-size:9px;color:var(--gray)">spent this month</div></div>
     </div>
-    <div style="margin-top:12px">
-      <div class="pbar" style="height:8px"><div class="pfill" id="month-budget-bar" style="height:8px;background:var(--gold)"></div></div>
-    </div>
+    <div class="pbar" style="height:7px"><div class="pfill" id="m-budget-bar" style="height:7px;background:var(--gold)"></div></div>
   </div>
-
-  <!-- Month breakdown -->
-
-  <div class="g2" style="margin-bottom:10px">
-    <div class="sbox">
-      <div class="lbl">Gross Income</div>
-      <div class="val" id="month-gross" style="color:var(--green)">$0</div>
-    </div>
-    <div class="sbox">
-      <div class="lbl">Tax (15%)</div>
-      <div class="val" id="month-tax" style="color:var(--red)">$0</div>
-    </div>
-    <div class="sbox">
-      <div class="lbl">Net After Tax</div>
-      <div class="val" id="month-net-tax" style="color:var(--blue)">$0</div>
-    </div>
-    <div class="sbox">
-      <div class="lbl">Net Saved</div>
-      <div class="val" id="month-net" style="color:var(--green)">$0</div>
-    </div>
-    <div class="sbox">
-      <div class="lbl">Sadaqah</div>
-      <div class="val" id="month-sad" style="color:var(--gold)">$0</div>
-    </div>
-    <div class="sbox">
-      <div class="lbl">Days in Month</div>
-      <div class="val" id="month-days" style="color:var(--gray)">0</div>
-    </div>
+  <!-- Expense tips -->
+  <div class="card">
+    <div class="lbl">💡 Save More Tips</div>
+    <div id="m-tips"></div>
   </div>
-
-  <!-- Expense breakdown -->
-
+  <div class="g2">
+    <div class="sbox"><div class="lbl">Gross Income</div><div class="val" id="m-gross" style="color:var(--green)">$0</div></div>
+    <div class="sbox"><div class="lbl">Tax (15%)</div><div class="val" id="m-tax" style="color:var(--red)">$0</div></div>
+    <div class="sbox"><div class="lbl">Net After Tax</div><div class="val" id="m-nat" style="color:var(--blue)">$0</div></div>
+    <div class="sbox"><div class="lbl">Net Saved</div><div class="val" id="m-net" style="color:var(--green)">$0</div></div>
+    <div class="sbox"><div class="lbl">Sadaqah</div><div class="val" id="m-sad" style="color:var(--gold)">$0</div></div>
+    <div class="sbox"><div class="lbl">Day of Month</div><div class="val" id="m-day" style="color:var(--gray)">0/0</div></div>
+  </div>
   <div class="card">
     <div class="lbl">Expense Breakdown</div>
-    <div id="month-exp-breakdown"></div>
+    <div id="m-exp-list"></div>
   </div>
 </div>
 
-<!-- PAGE: PROJECTIONS -->
+<!-- ══ CHART PAGE ══ -->
+
+<div id="p-chart" class="pg">
+  <div style="margin-bottom:12px">
+    <div style="font-size:18px;font-weight:800">Trends 📈</div>
+    <div style="font-size:10px;color:var(--gray)">Earnings vs Expenses over time</div>
+  </div>
+  <!-- Line chart -->
+  <div class="card">
+    <div class="lbl">Earnings vs Expenses (Daily)</div>
+    <div class="chart-wrap" style="height:220px"><canvas id="lineChart"></canvas></div>
+    <div style="display:flex;gap:14px;margin-top:10px;flex-wrap:wrap">
+      <div style="display:flex;align-items:center;gap:5px"><div style="width:12px;height:3px;background:var(--green);border-radius:2px"></div><span style="font-size:10px;color:var(--gray)">Earnings</span></div>
+      <div style="display:flex;align-items:center;gap:5px"><div style="width:12px;height:3px;background:var(--red);border-radius:2px"></div><span style="font-size:10px;color:var(--gray)">Expenses</span></div>
+      <div style="display:flex;align-items:center;gap:5px"><div style="width:12px;height:3px;background:var(--blue);border-radius:2px;border-top:2px dashed var(--blue)"></div><span style="font-size:10px;color:var(--gray)">Target</span></div>
+    </div>
+  </div>
+  <!-- Cumulative savings line -->
+  <div class="card">
+    <div class="lbl">Cumulative Net Savings</div>
+    <div class="chart-wrap" style="height:180px"><canvas id="savingsChart"></canvas></div>
+  </div>
+  <!-- Bar: expense categories -->
+  <div class="card">
+    <div class="lbl">Expense Categories</div>
+    <div class="chart-wrap" style="height:180px"><canvas id="expChart"></canvas></div>
+  </div>
+  <!-- Stats -->
+  <div class="g3">
+    <div class="sbox"><div class="lbl">Best Day</div><div class="val" id="ch-best" style="color:var(--green)">$0</div></div>
+    <div class="sbox"><div class="lbl">Avg/Day</div><div class="val" id="ch-avg" style="color:var(--blue)">$0</div></div>
+    <div class="sbox"><div class="lbl">Days Logged</div><div class="val" id="ch-days" style="color:var(--gray)">0</div></div>
+  </div>
+</div>
+
+<!-- ══ FORECAST PAGE ══ -->
 
 <div id="p-proj" class="pg">
-  <div class="hdr">
-    <div>
-      <div class="htitle">Projections 🔮</div>
-      <div class="hday">Based on your current pace</div>
-    </div>
+  <div style="margin-bottom:12px">
+    <div style="font-size:18px;font-weight:800">Forecast 🔮</div>
+    <div style="font-size:10px;color:var(--gray)">Mar 30, 2026 → Apr 1, 2027 · 368 days</div>
   </div>
-
-  <!-- Goal status big card -->
-
-  <div id="goal-card" class="card" style="text-align:center;padding:24px">
+  <div class="card" id="goal-card" style="text-align:center;padding:20px">
     <div class="lbl">Mission: Rise & Earn</div>
-    <div style="font-size:48px;margin:8px 0" id="goal-emoji">🎯</div>
-    <div class="bignum" id="proj-year-net" style="font-size:36px">$0</div>
-    <div class="sublbl" id="proj-year-sub">Projected savings by Apr 1, 2027</div>
-    <div style="margin-top:14px">
-      <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--gray);margin-bottom:6px">
-        <span>Goal: $30,000</span><span id="proj-goal-pct">0%</span>
+    <div style="font-size:44px;margin:6px 0" id="goal-emoji">🎯</div>
+    <div class="bignum" id="p-yearnet" style="font-size:32px">$0</div>
+    <div class="sub">Projected savings by Apr 1, 2027</div>
+    <div style="margin-top:12px">
+      <div style="display:flex;justify-content:space-between;font-size:9px;color:var(--gray);margin-bottom:4px">
+        <span>Goal: $30,000</span><span id="p-goal-pct">0%</span>
       </div>
-      <div class="pbar" style="height:12px"><div class="pfill" id="proj-goal-bar" style="height:12px"></div></div>
+      <div class="pbar" style="height:10px"><div class="pfill" id="p-goal-bar" style="height:10px"></div></div>
     </div>
-    <div id="proj-verdict" style="margin-top:14px;padding:10px;border-radius:10px;font-size:13px;font-weight:700"></div>
+    <div id="p-verdict" style="margin-top:12px;padding:9px;border-radius:9px;font-size:12px;font-weight:700"></div>
   </div>
-
-  <!-- Days to goal -->
-
-  <div class="g2" style="margin-bottom:10px">
-    <div class="sbox" style="border:1px solid #1a3a1a">
-      <div class="lbl">Days to Hit Goal</div>
-      <div class="val" id="days-to-goal" style="color:var(--green)">...</div>
-    </div>
-    <div class="sbox" style="border:1px solid #1a1a3a">
-      <div class="lbl">Days Remaining</div>
-      <div class="val" id="days-rem" style="color:var(--blue)">...</div>
-    </div>
-    <div class="sbox">
-      <div class="lbl">Adj. Daily Target</div>
-      <div class="val" id="adj-target" style="color:var(--purple)">$0</div>
-    </div>
-    <div class="sbox">
-      <div class="lbl">Avg Per Day</div>
-      <div class="val" id="avg-daily" style="color:var(--green)">$0</div>
-    </div>
+  <div class="g2">
+    <div class="sbox" style="border:1px solid #1a3a1a"><div class="lbl">Days to Goal</div><div class="val" id="p-days2goal" style="color:var(--green)">...</div></div>
+    <div class="sbox"><div class="lbl">Days Left</div><div class="val" id="p-daysrem" style="color:var(--blue)">...</div></div>
+    <div class="sbox"><div class="lbl">Adj. Daily Target</div><div class="val" id="p-adj" style="color:var(--purple)">$0</div></div>
+    <div class="sbox"><div class="lbl">Avg Per Day</div><div class="val" id="p-avg" style="color:var(--green)">$0</div></div>
   </div>
-
-  <!-- Weekly / Monthly projections -->
-
   <div class="card">
-    <div class="lbl">At Current Pace</div>
-    <div style="display:flex;flex-direction:column;gap:12px;margin-top:8px">
-      <div style="display:flex;justify-content:space-between;align-items:center;padding:10px;background:#1a1a1a;border-radius:10px">
-        <div>
-          <div style="font-size:11px;color:var(--gray);font-weight:700">WEEKLY</div>
-          <div style="font-size:18px;font-weight:800;color:var(--green)" id="proj-wg">$0</div>
-        </div>
-        <div style="text-align:right">
-          <div style="font-size:10px;color:var(--gray)">Net saved</div>
-          <div style="font-size:16px;font-weight:800" id="proj-wn">$0</div>
-        </div>
+    <div class="lbl">Projections at Current Pace</div>
+    <div style="display:flex;flex-direction:column;gap:8px;margin-top:6px">
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:10px;background:#161616;border-radius:10px">
+        <div><div style="font-size:10px;color:var(--gray);font-weight:700">WEEKLY</div><div class="num" id="p-wg" style="color:var(--green)">$0</div></div>
+        <div style="text-align:right"><div style="font-size:9px;color:var(--gray)">net saved</div><div style="font-size:16px;font-weight:800" id="p-wn">$0</div></div>
       </div>
-      <div style="display:flex;justify-content:space-between;align-items:center;padding:10px;background:#1a1a1a;border-radius:10px">
-        <div>
-          <div style="font-size:11px;color:var(--gray);font-weight:700">MONTHLY</div>
-          <div style="font-size:18px;font-weight:800;color:var(--green)" id="proj-mg">$0</div>
-        </div>
-        <div style="text-align:right">
-          <div style="font-size:10px;color:var(--gray)">Net saved</div>
-          <div style="font-size:16px;font-weight:800" id="proj-mn">$0</div>
-        </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:10px;background:#161616;border-radius:10px">
+        <div><div style="font-size:10px;color:var(--gray);font-weight:700">MONTHLY</div><div class="num" id="p-mg" style="color:var(--green)">$0</div></div>
+        <div style="text-align:right"><div style="font-size:9px;color:var(--gray)">net saved</div><div style="font-size:16px;font-weight:800" id="p-mn">$0</div></div>
       </div>
-      <div style="display:flex;justify-content:space-between;align-items:center;padding:10px;background:#1a1a1a;border-radius:10px;border:1px solid #2a2a2a">
-        <div>
-          <div style="font-size:11px;color:var(--gray);font-weight:700">YEARLY</div>
-          <div style="font-size:18px;font-weight:800;color:var(--green)" id="proj-yg">$0</div>
-        </div>
-        <div style="text-align:right">
-          <div style="font-size:10px;color:var(--gray)">Net saved</div>
-          <div style="font-size:16px;font-weight:800" id="proj-yn">$0</div>
-        </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:10px;background:#161616;border-radius:10px;border:1px solid #222">
+        <div><div style="font-size:10px;color:var(--gray);font-weight:700">YEARLY</div><div class="num" id="p-yg" style="color:var(--green)">$0</div></div>
+        <div style="text-align:right"><div style="font-size:9px;color:var(--gray)">net saved</div><div style="font-size:16px;font-weight:800" id="p-yn">$0</div></div>
       </div>
     </div>
   </div>
-
-  <!-- Loan tracker -->
-
   <div class="card">
-    <div style="display:flex;justify-content:space-between;margin-bottom:10px">
+    <div style="display:flex;justify-content:space-between;margin-bottom:8px">
       <div class="lbl" style="margin:0">🏦 Loan: $3,000</div>
-      <div style="font-size:11px;color:var(--orange);font-weight:700" id="loan-pct-lbl">0% cleared</div>
+      <div style="font-size:10px;color:var(--orange);font-weight:700" id="p-loan-pct">0% cleared</div>
     </div>
-    <div class="pbar" style="height:10px"><div class="pfill" id="loan-pbar" style="height:10px;background:var(--orange)"></div></div>
-    <div style="display:flex;justify-content:space-between;margin-top:8px;font-size:11px">
-      <span style="color:var(--green)" id="loan-paid-lbl">$0 paid</span>
-      <span style="color:var(--red)" id="loan-rem-lbl">$3,000 left</span>
+    <div class="pbar" style="height:9px"><div class="pfill" id="p-loan-bar" style="height:9px;background:var(--orange)"></div></div>
+    <div style="display:flex;justify-content:space-between;margin-top:7px;font-size:10px">
+      <span style="color:var(--green)" id="p-loan-paid">$0 paid</span>
+      <span style="color:var(--red)" id="p-loan-rem">$3,000 left</span>
     </div>
   </div>
-
-  <!-- Annual sadaqah -->
-
-  <div class="card" style="background:linear-gradient(135deg,#1a1400,#111);border-color:#2a2000;text-align:center">
-    <div class="lbl" style="color:var(--gold)">🤲 SADAQAH (In the name of Allah)</div>
-    <div style="font-size:28px;font-weight:800;color:var(--gold);margin:8px 0" id="total-sadaqah">$0</div>
-    <div style="font-size:11px;color:var(--gray)">Total given · Est. annual: <span id="ann-sadaqah" style="color:var(--gold)">$0</span></div>
+  <div class="card" style="background:linear-gradient(135deg,#0d0d00,#111);border-color:#2a2000;text-align:center">
+    <div class="lbl" style="color:var(--gold)">🤲 SADAQAH — In the name of Allah</div>
+    <div style="font-size:26px;font-weight:800;color:var(--gold);margin:6px 0" id="p-sad-total">$0</div>
+    <div style="font-size:10px;color:var(--gray)">Total given · Est. annual: <span id="p-sad-ann" style="color:var(--gold)">$0</span></div>
   </div>
 </div>
 
-<!-- PAGE: LOG -->
+<!-- ══ LOG PAGE ══ -->
 
 <div id="p-log" class="pg">
-  <div class="hdr">
-    <div><div class="htitle">Log Entry ➕</div></div>
-  </div>
-  <div style="background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px">
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
+  <div style="margin-bottom:12px"><div style="font-size:18px;font-weight:800">Log Entry ➕</div></div>
+  <div class="card">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px">
       <div><label class="flbl">Date</label><input type="date" id="fd" class="finput" style="margin:0"></div>
-      <div><label class="flbl">Amount ($)</label><input type="number" id="fa" class="finput" placeholder="0.00" step="0.01" style="margin:0"></div>
+      <div><label class="flbl">Amount</label><input type="number" id="fa" class="finput" placeholder="0.00" step="0.01" style="margin:0"></div>
     </div>
-    <label class="flbl">Name</label>
+    <label class="flbl">Name / Label</label>
     <input type="text" id="fn" class="finput" placeholder="e.g. Freelance, Grocery, Gas...">
     <label class="flbl">Type</label>
-    <div class="g2" style="margin-bottom:10px">
-      <button class="tbtn" id="t-credit" onclick="setT('credit')" style="border-color:var(--green);color:var(--green);background:rgba(0,200,83,.08)">💰 Credit/Income</button>
+    <div class="tgrid">
+      <button class="tbtn" id="t-credit" onclick="setT('credit')" style="border-color:var(--green);color:var(--green);background:rgba(0,230,118,.07)">💰 Credit/Income</button>
       <button class="tbtn" id="t-expense" onclick="setT('expense')">🛒 Expense</button>
       <button class="tbtn" id="t-loan_payment" onclick="setT('loan_payment')">🏦 Loan Payment</button>
       <button class="tbtn" id="t-debt_payment" onclick="setT('debt_payment')">💳 Debt Payment</button>
     </div>
-    <div id="cat-wrap" style="display:none;margin-bottom:10px">
+    <div id="cat-wrap" style="display:none">
       <label class="flbl">Category</label>
-      <div id="cat-grid" style="display:flex;flex-wrap:wrap"></div>
+      <div id="cat-grid" class="catgrid"></div>
     </div>
     <label class="flbl">Note (optional)</label>
     <input type="text" id="fnt" class="finput" placeholder="Extra details...">
-    <button class="savebtn" onclick="saveE()" style="background:var(--green);color:#000">💾 SAVE ENTRY</button>
+    <button class="savebtn" onclick="saveE()">💾 SAVE ENTRY</button>
   </div>
-
-  <!-- Recent entries -->
-
-  <div style="margin-top:16px">
+  <div style="margin-top:4px">
     <div class="lbl">Recent Entries</div>
     <div id="recent-list"></div>
   </div>
@@ -496,78 +348,58 @@ svg.ring{transform:rotate(-90deg)}
 
 <div class="toast" id="toast" style="opacity:0"></div>
 
-<!-- NAV -->
-
 <div class="nav">
-  <button class="nb" onclick="go('today')" id="nb-today"><span class="ni">🏠</span><span class="nl" style="color:var(--green)">Today</span></button>
-  <button class="nb" onclick="go('week')" id="nb-week"><span class="ni">📅</span><span class="nl" style="color:var(--gray)">Week</span></button>
-  <button class="nb" onclick="go('month')" id="nb-month"><span class="ni">🗓️</span><span class="nl" style="color:var(--gray)">Month</span></button>
-  <button class="nb" onclick="go('proj')" id="nb-proj"><span class="ni">🔮</span><span class="nl" style="color:var(--gray)">Forecast</span></button>
-  <button class="nb" onclick="go('log')" id="nb-log"><span class="ni">➕</span><span class="nl" style="color:var(--gray)">Log</span></button>
+  <button class="nb on" onclick="go('today')" id="nb-today"><span class="ni">🏠</span><span class="nl">Today</span></button>
+  <button class="nb" onclick="go('week')" id="nb-week"><span class="ni">📅</span><span class="nl">Week</span></button>
+  <button class="nb" onclick="go('month')" id="nb-month"><span class="ni">🗓️</span><span class="nl">Month</span></button>
+  <button class="nb" onclick="go('chart')" id="nb-chart"><span class="ni">📈</span><span class="nl">Trends</span></button>
+  <button class="nb" onclick="go('proj')" id="nb-proj"><span class="ni">🔮</span><span class="nl">Forecast</span></button>
+  <button class="nb" onclick="go('log')" id="nb-log"><span class="ni">➕</span><span class="nl">Log</span></button>
 </div>
 
 <script>
 const CFG={
   dailyTarget:229.85,savingsGoal:30000,totalLoan:3000,
   taxRate:.15,sadaqahRate:.01,monthlyBudget:3200,
-  dailyBudget:3200/30,totalDays:372,startDate:'2026-03-25'
+  dailyBudget:3200/30,totalDays:368,
+  startDate:'2026-03-30',endDate:'2027-04-01'
 };
 
-const MOTIVATIONS=[
-  {text:"Every dollar counts. Keep pushing! 💪",sub:"You're building your future today."},
-  {text:"Day by day. Dollar by dollar. 🔥",sub:"Rise & Earn — your mission continues!"},
-  {text:"You started with a dream. Keep going! 🚀",sub:"$30,000 is closer than yesterday."},
-  {text:"Alhamdulillah for today's earnings! 🤲",sub:"Keep giving sadaqah. Blessings multiply."},
-  {text:"The loan is getting smaller! 💪",sub:"Every payment brings you closer to freedom."},
-  {text:"Small consistent actions = big results! ⚡",sub:"372 days. One entry at a time."},
-  {text:"You're writing your success story! ✍️",sub:"Day by day, Rise & Earn!"},
-  {text:"Believe in the process! 🌟",sub:"Your future self will thank you."},
+const MOTIVS=[
+  {t:"Fresh start. Clean slate. Let's go! 🚀",s:"Mar 30, 2026 — Day 1 of your journey!"},
+  {t:"Every dollar you earn today matters! 💪",s:"You're building your future, one entry at a time."},
+  {t:"Alhamdulillah for today's blessings! 🤲",s:"Give sadaqah. Watch your wealth multiply."},
+  {t:"$30,000 won't save itself! 🔥",s:"Rise. Earn. Repeat. Every single day."},
+  {t:"The loan won't last forever! 💪",s:"Each payment brings you closer to freedom."},
+  {t:"Small wins add up to big results! ⚡",s:"Stay consistent. Trust the process."},
+  {t:"Your future self is watching you! 👀",s:"Make them proud today."},
+  {t:"Cut expenses. Grow earnings. Win! 🏆",s:"Every $1 saved from budget = $1 closer to goal."},
+  {t:"Day by day. Dollar by dollar! 💰",s:"368 days. One mission. Rise & Earn!"},
+  {t:"Bismillah — let's make it happen! 🤲",s:"With Allah's blessing, $30K is yours!"},
 ];
 
-const SEED=[
-  {id:'d1_1',date:'2026-03-25',type:'credit',name:'Credit',category:'',amount:59},
-  {id:'d1_2',date:'2026-03-25',type:'expense',name:'Grocery',category:'Grocery',amount:5},
-  {id:'d1_3',date:'2026-03-25',type:'expense',name:'Gas',category:'Gas',amount:54},
-  {id:'d1_4',date:'2026-03-25',type:'credit',name:'Credit',category:'',amount:110},
-  {id:'d1_5',date:'2026-03-25',type:'credit',name:'Credit',category:'',amount:25},
-  {id:'d1_6',date:'2026-03-25',type:'credit',name:'Credit',category:'',amount:20},
-  {id:'d1_7',date:'2026-03-25',type:'credit',name:'Credit',category:'',amount:26},
-  {id:'d2_1',date:'2026-03-26',type:'credit',name:'Credit',category:'',amount:1200},
-  {id:'d2_2',date:'2026-03-26',type:'credit',name:'Credit',category:'',amount:16},
-  {id:'d3_1',date:'2026-03-27',type:'credit',name:'Credit',category:'',amount:16},
-  {id:'d3_2',date:'2026-03-27',type:'expense',name:'Grocery',category:'Grocery',amount:69},
-  {id:'d3_3',date:'2026-03-27',type:'expense',name:'Smoke',category:'Smoke',amount:15},
-  {id:'d3_4',date:'2026-03-27',type:'credit',name:'Credit',category:'',amount:28},
-  {id:'d3_5',date:'2026-03-27',type:'credit',name:'Credit',category:'',amount:18},
-  {id:'d3_6',date:'2026-03-27',type:'credit',name:'Credit',category:'',amount:14},
-  {id:'d3_7',date:'2026-03-27',type:'credit',name:'Credit',category:'',amount:29},
-  {id:'d4_1',date:'2026-03-28',type:'expense',name:'Gas',category:'Gas',amount:20},
-  {id:'d4_2',date:'2026-03-28',type:'expense',name:'Smoke',category:'Smoke',amount:15},
-  {id:'d4_3',date:'2026-03-28',type:'credit',name:'Credit',category:'',amount:11},
-  {id:'d4_4',date:'2026-03-28',type:'credit',name:'Credit',category:'',amount:27},
-];
-
-const TM={credit:{label:'Income',icon:'💰',color:'#00c853'},expense:{label:'Expense',icon:'🛒',color:'#ff1744'},loan_payment:{label:'Loan',icon:'🏦',color:'#ff6d00'},debt_payment:{label:'Debt',icon:'💳',color:'#ffd600'}};
-const CATS=['Grocery','Gas','Smoke','Rent','Food','Transport','Medical','Other'];
+const TM={
+  credit:{label:'Income',icon:'💰',color:'#00e676'},
+  expense:{label:'Expense',icon:'🛒',color:'#ff1744'},
+  loan_payment:{label:'Loan Payment',icon:'🏦',color:'#ff6d00'},
+  debt_payment:{label:'Debt Payment',icon:'💳',color:'#ffd600'}
+};
+const CATS=['Grocery','Gas','Smoke','Rent','Food','Transport','Medical','Bills','Other'];
+const PIE_C=['#448aff','#ff6d00','#ff1744','#ffd600','#e040fb','#ffc400','#00e676','#1de9b6','#666'];
 
 let entries=[];
-function load(){try{const r=localStorage.getItem('re_v4');entries=r?JSON.parse(r):SEED;if(!r)savE()}catch(e){entries=SEED}}
-function savE(){localStorage.setItem('re_v4',JSON.stringify(entries))}
-function fmt(n){return '$'+Math.abs(n).toLocaleString('en',{minimumFractionDigits:n%1?2:0,maximumFractionDigits:2})}
+function load(){try{const r=localStorage.getItem('re_v5');entries=r?JSON.parse(r):[];if(!r)savE()}catch(e){entries=[]}}
+function savE(){localStorage.setItem('re_v5',JSON.stringify(entries))}
+function fmt(n,dec=0){return(n<0?'-$':'$')+Math.abs(n).toLocaleString('en',{minimumFractionDigits:dec,maximumFractionDigits:dec})}
 function dif(a,b){return Math.round((new Date(b)-new Date(a))/86400000)}
 
-function getWeekStart(){
-  const d=new Date();const day=d.getDay();
-  d.setDate(d.getDate()-day);d.setHours(0,0,0,0);return d;
-}
-function getMonthStart(){const d=new Date();return new Date(d.getFullYear(),d.getMonth(),1)}
+function getWeekStart(){const d=new Date();d.setDate(d.getDate()-d.getDay());d.setHours(0,0,0,0);return d.toISOString().split('T')[0]}
+function getMonthStart(){const d=new Date();return new Date(d.getFullYear(),d.getMonth(),1).toISOString().split('T')[0]}
 
 function calcAll(){
   const today=new Date().toISOString().split('T')[0];
-  const ws=getWeekStart().toISOString().split('T')[0];
-  const ms=getMonthStart().toISOString().split('T')[0];
+  const ws=getWeekStart(),ms=getMonthStart();
 
-  // All time
   const inc=entries.filter(e=>e.type==='credit').reduce((s,e)=>s+e.amount,0);
   const exp=entries.filter(e=>e.type==='expense').reduce((s,e)=>s+e.amount,0);
   const lp=entries.filter(e=>e.type==='loan_payment').reduce((s,e)=>s+e.amount,0);
@@ -580,29 +412,27 @@ function calcAll(){
   const tp=ns-lr;
   const el=Math.max(1,dif(CFG.startDate,today)+1);
   const rm=Math.max(0,CFG.totalDays-el);
-  const avg=inc/el;
+  const avg=el>0?inc/el:0;
   const need=(CFG.savingsGoal+CFG.totalLoan+CFG.dailyBudget*CFG.totalDays)/(1-CFG.taxRate);
   const adj=rm>0?(need-inc)/rm:0;
   const pyg=avg*CFG.totalDays;
   const pyn=(pyg*(1-CFG.taxRate))-(CFG.dailyBudget*CFG.totalDays)-CFG.totalLoan;
+  const dailyNet=avg*(1-CFG.taxRate)-CFG.dailyBudget;
+  const d2g=dailyNet>0?Math.ceil((CFG.savingsGoal+lr-ns)/dailyNet):999;
 
   // Today
   const te=entries.filter(e=>e.date===today);
   const tInc=te.filter(e=>e.type==='credit').reduce((s,e)=>s+e.amount,0);
   const tExp=te.filter(e=>e.type==='expense').reduce((s,e)=>s+e.amount,0);
-  const tSaved=CFG.dailyBudget-tExp; // saved vs daily budget
 
   // Week
   const we=entries.filter(e=>e.date>=ws);
   const wInc=we.filter(e=>e.type==='credit').reduce((s,e)=>s+e.amount,0);
   const wExp=we.filter(e=>e.type==='expense').reduce((s,e)=>s+e.amount,0);
   const wTax=wInc*CFG.taxRate;
-  const wNat=wInc-wTax;
-  const wNb=wNat-wExp;
+  const wNb=(wInc-wTax)-wExp;
   const wSad=Math.max(0,wNb)*CFG.sadaqahRate;
   const wNs=wNb-wSad;
-  const weekBudget=CFG.monthlyBudget/4;
-  const wBudgetSaved=weekBudget-wExp;
 
   // Month
   const me=entries.filter(e=>e.date>=ms);
@@ -613,253 +443,313 @@ function calcAll(){
   const mNb=mNat-mExp;
   const mSad=Math.max(0,mNb)*CFG.sadaqahRate;
   const mNs=mNb-mSad;
-  const mBudgetSaved=CFG.monthlyBudget-mExp;
-  const daysInMonth=new Date(new Date().getFullYear(),new Date().getMonth()+1,0).getDate();
-  const dayOfMonth=new Date().getDate();
-
-  // Days to goal at current pace
-  const dailyNetSave=(avg*(1-CFG.taxRate))-CFG.dailyBudget;
-  const remaining4Goal=CFG.savingsGoal+lr-ns;
-  const daysToGoal=dailyNetSave>0?Math.ceil(remaining4Goal/dailyNetSave):999;
+  const dim=new Date(new Date().getFullYear(),new Date().getMonth()+1,0).getDate();
 
   return{
     inc,exp,lp,tax,nat,sad,ns,lr,tp,el,rm,avg,adj,pyg,pyn,
-    tInc,tExp,tSaved,te,today,
-    wInc,wExp,wTax,wNat,wNs,wSad,wBudgetSaved,weekBudget,
-    mInc,mExp,mTax,mNat,mNs,mSad,mBudgetSaved,daysInMonth,dayOfMonth,
-    lop:(CFG.totalLoan-lr)/CFG.totalLoan*100,
+    tInc,tExp,te,today,ws,ms,
+    wInc,wExp,wTax,wNs,wSad,
+    mInc,mExp,mTax,mNat,mNs,mSad,dim,
+    lop:((CFG.totalLoan-lr)/CFG.totalLoan*100),
     gp:Math.max(0,ns/CFG.savingsGoal*100),
     on:pyn>=CFG.savingsGoal,
-    as:sad/el*CFG.totalDays,
+    as:el>0?(sad/el)*CFG.totalDays:0,
     pwg:avg*7,pwn:(avg*(1-CFG.taxRate)-CFG.dailyBudget)*7,
     pmg:avg*30,pmn:(avg*(1-CFG.taxRate)-CFG.dailyBudget)*30,
-    ws,ms,daysToGoal,
+    d2g,
   };
 }
+
+let lineC=null,savC=null,expC=null;
 
 function render(){
   const s=calcAll();
 
   // ── TODAY ──
-  const mot=MOTIVATIONS[s.el%MOTIVATIONS.length];
-  document.getElementById('motiv-text').textContent=mot.text;
-  document.getElementById('motiv-sub').textContent=mot.sub;
-  document.getElementById('today-date').textContent=new Date().toLocaleDateString('en',{weekday:'long',month:'long',day:'numeric',year:'numeric'});
-  const tdPct=Math.min(s.tInc/CFG.dailyTarget*100,100);
-  const tdCol=tdPct>=100?'var(--green)':tdPct>=50?'var(--yellow)':'var(--red)';
-  document.getElementById('today-earned').textContent=fmt(s.tInc);
-  document.getElementById('today-earned').style.color=tdCol;
-  document.getElementById('today-need').textContent=fmt(Math.max(0,CFG.dailyTarget-s.tInc));
-  document.getElementById('today-need').style.color=tdPct>=100?'var(--green)':'var(--yellow)';
-  document.getElementById('today-target-sub').textContent=`Target: ${fmt(CFG.dailyTarget)}/day · ${tdPct.toFixed(0)}% achieved`;
-  document.getElementById('today-pct-lbl').textContent=tdPct.toFixed(0)+'%';
-  document.getElementById('today-pbar').style.width=tdPct+'%';
-  document.getElementById('today-pbar').style.background=tdCol;
-  const badge=document.getElementById('today-badge');
-  badge.textContent=tdPct>=100?'✅ TARGET MET':tdPct>0?'⚡ IN PROGRESS':'🎯 START EARNING';
-  badge.style.background=tdPct>=100?'rgba(0,200,83,.2)':tdPct>0?'rgba(255,214,0,.2)':'rgba(255,23,68,.2)';
-  badge.style.color=tdPct>=100?'var(--green)':tdPct>0?'var(--yellow)':'var(--red)';
-  // Budget savings
-  const budgetPct=Math.min(s.tExp/CFG.dailyBudget*100,100);
-  document.getElementById('saved-from-budget').textContent=s.tSaved>=0?fmt(s.tSaved):`-${fmt(Math.abs(s.tSaved))}`;
-  document.getElementById('saved-from-budget').style.color=s.tSaved>=0?'var(--gold)':'var(--red)';
-  document.getElementById('budget-spent').textContent=`Spent: ${fmt(s.tExp)}`;
-  document.getElementById('budget-pbar').style.width=budgetPct+'%';
+  const mot=MOTIVS[s.el%MOTIVS.length];
+  document.getElementById('t-mot-text').textContent=mot.t;
+  document.getElementById('t-mot-sub').textContent=mot.s;
+  const motColors=['linear-gradient(135deg,#003d1f,#001a0d)','linear-gradient(135deg,#1a0d00,#0d0800)','linear-gradient(135deg,#0d0d00,#080800)'];
+  document.getElementById('t-motiv').style.background=motColors[s.el%motColors.length];
+
+  document.getElementById('t-date').textContent=new Date().toLocaleDateString('en',{weekday:'long',month:'long',day:'numeric',year:'numeric'});
+  const tPct=Math.min(s.tInc/CFG.dailyTarget*100,100);
+  const tCol=tPct>=100?'var(--green)':tPct>=50?'var(--yellow)':'var(--red)';
+  set('t-earned',fmt(s.tInc),tCol);
+  set('t-need',fmt(Math.max(0,CFG.dailyTarget-s.tInc)),tPct>=100?'var(--green)':'var(--yellow)');
+  document.getElementById('t-earned-sub').textContent=`Target: ${fmt(CFG.dailyTarget)} · ${tPct.toFixed(0)}% achieved`;
+  document.getElementById('t-target-lbl').textContent=CFG.dailyTarget.toFixed(2);
+  document.getElementById('t-pct-lbl').textContent=tPct.toFixed(0)+'%';
+  setPbar('t-pbar',tPct,tCol);
+  const badge=document.getElementById('t-badge');
+  badge.textContent=tPct>=100?'✅ TARGET MET!':tPct>0?'⚡ IN PROGRESS':'🎯 START NOW';
+  badge.style.cssText+=`;background:${tPct>=100?'rgba(0,230,118,.15)':tPct>0?'rgba(255,214,0,.15)':'rgba(255,23,68,.15)'};color:${tPct>=100?'var(--green)':tPct>0?'var(--yellow)':'var(--red)'}`;
+  const tBudSav=CFG.dailyBudget-s.tExp;
+  set('t-budget-saved',(tBudSav>=0?'':'-')+fmt(Math.abs(tBudSav)),tBudSav>=0?'var(--gold)':'var(--red)');
+  document.getElementById('t-spent-lbl').textContent=`Spent: ${fmt(s.tExp)}`;
+  setPbar('t-budget-bar',Math.min(s.tExp/CFG.dailyBudget*100,100),'var(--gold)');
   // Today entries
-  const todayE=s.te.slice().reverse();
-  document.getElementById('today-entries').innerHTML=todayE.length?todayE.map(e=>{
+  const te=[...s.te].reverse();
+  document.getElementById('t-entries').innerHTML=te.length?te.map(e=>{
     const tm=TM[e.type]||TM.credit;
-    return `<div class="erow">
-      <div class="eicon" style="background:${tm.color}22">${tm.icon}</div>
-      <div class="einfo"><div class="ename">${e.name}</div><div class="etime">${tm.label}</div></div>
-      <div style="text-align:right">
-        <div class="eamt" style="color:${tm.color}">${e.type==='expense'?'-':''}${fmt(e.amount)}</div>
-        <button class="delbtn" onclick="delE('${e.id}')">🗑</button>
-      </div></div>`;
-  }).join(''):'<div style="text-align:center;color:var(--gray);padding:20px;font-size:13px">No entries yet today 😊<br>Tap + ADD to log!</div>';
-  // Quick stats
-  document.getElementById('true-pos').textContent=(s.tp<0?'-':'')+fmt(Math.abs(s.tp));
-  document.getElementById('true-pos').style.color=s.tp>=0?'var(--green)':'var(--red)';
-  document.getElementById('loan-left').textContent=fmt(s.lr);
-  document.getElementById('net-saved-sm').textContent=fmt(s.ns);
-  document.getElementById('sadaqah-sm').textContent=fmt(s.sad);
+    return `<div class="erow"><div class="eicon" style="background:${tm.color}18">${tm.icon}</div>
+    <div class="einfo"><div class="ename">${e.name}</div><div class="etime">${tm.label}${e.note?' · '+e.note:''}</div></div>
+    <div style="text-align:right"><div class="eamt" style="color:${tm.color}">${e.type==='expense'?'-':''}${fmt(e.amount,2)}</div>
+    <button class="delbtn" onclick="delE('${e.id}')">🗑 del</button></div></div>`;
+  }).join(''):'<div style="text-align:center;color:var(--gray);padding:18px;font-size:12px">Nothing logged yet today 😊<br><br>Tap <b style="color:var(--green)">+ ADD</b> to start!</div>';
+  const tp2=s.tp;
+  set('t-truepos',(tp2>=0?'':'-')+fmt(Math.abs(tp2)),tp2>=0?'var(--green)':'var(--red)');
+  set('t-loan',fmt(s.lr),'var(--orange)');
+  set('t-saved',fmt(s.ns),'var(--green)');
+  set('t-sad',fmt(s.sad,2),'var(--gold)');
 
   // ── WEEK ──
-  const wStart=new Date(s.ws+'T12:00:00').toLocaleDateString('en',{month:'short',day:'numeric'});
-  const wEnd=new Date(Date.now()+6*86400000).toLocaleDateString('en',{month:'short',day:'numeric'});
-  document.getElementById('week-range').textContent=`${wStart} — ${wEnd}`;
-  const weekTarget=CFG.dailyTarget*7;
-  const wPct=Math.min(s.wInc/weekTarget*100,100);
+  const wS=new Date(s.ws+'T12:00:00');
+  const wE=new Date(wS);wE.setDate(wE.getDate()+6);
+  document.getElementById('w-range').textContent=`${wS.toLocaleDateString('en',{month:'short',day:'numeric'})} — ${wE.toLocaleDateString('en',{month:'short',day:'numeric'})}`;
+  const wTarget=CFG.dailyTarget*7;
+  const wPct=Math.min(s.wInc/wTarget*100,100);
   const wCol=wPct>=100?'var(--green)':wPct>=50?'var(--yellow)':'var(--red)';
-  document.getElementById('week-earned').textContent=fmt(s.wInc);
-  document.getElementById('week-earned').style.color=wCol;
-  document.getElementById('week-target-lbl').textContent=(weekTarget).toFixed(0);
-  document.getElementById('week-pct-lbl').textContent=wPct.toFixed(0)+'%';
-  document.getElementById('week-pbar').style.width=wPct+'%';
-  document.getElementById('week-pbar').style.background=wCol;
-  document.getElementById('week-target-sub').textContent=`Week target: ${fmt(weekTarget)} · ${wPct.toFixed(0)}% achieved`;
-  document.getElementById('week-budget-saved').textContent=(s.wBudgetSaved>=0?'':'-')+fmt(Math.abs(s.wBudgetSaved));
-  document.getElementById('week-budget-saved').style.color=s.wBudgetSaved>=0?'var(--gold)':'var(--red)';
-  document.getElementById('week-expenses-lbl').textContent=`Spent: ${fmt(s.wExp)}`;
-  document.getElementById('week-net').textContent=fmt(s.wNs);
-  document.getElementById('week-net').style.color=s.wNs>=0?'var(--green)':'var(--red)';
-  document.getElementById('week-tax').textContent=fmt(s.wTax);
-  document.getElementById('week-exp').textContent=fmt(s.wExp);
-  document.getElementById('week-sad').textContent=fmt(s.wSad);
+  set('w-earned',fmt(s.wInc),wCol);
+  document.getElementById('w-sub').textContent=`${wPct.toFixed(0)}% of week target`;
+  document.getElementById('w-target-lbl').textContent=wTarget.toFixed(0);
+  document.getElementById('w-pct-lbl').textContent=wPct.toFixed(0)+'%';
+  setPbar('w-pbar',wPct,wCol);
+  const wBudSav=CFG.monthlyBudget/4-s.wExp;
+  set('w-budget-saved',(wBudSav>=0?'':'-')+fmt(Math.abs(wBudSav)),wBudSav>=0?'var(--gold)':'var(--red)');
+  document.getElementById('w-exp-lbl').textContent=`Spent: ${fmt(s.wExp)}`;
+  set('w-net',fmt(s.wNs),s.wNs>=0?'var(--green)':'var(--red)');
+  set('w-tax',fmt(s.wTax),'var(--red)');
+  set('w-exp',fmt(s.wExp),'var(--red)');
+  set('w-sad',fmt(s.wSad,2),'var(--gold)');
   // Week bars
-  const days=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
-  const weekStart=getWeekStart();
-  let barsHtml='',amtsHtml='';
-  const maxVal=Math.max(CFG.dailyTarget,...[0,1,2,3,4,5,6].map(i=>{
-    const d=new Date(weekStart);d.setDate(d.getDate()+i);
-    const ds=d.toISOString().split('T')[0];
-    return entries.filter(e=>e.date===ds&&e.type==='credit').reduce((s,e)=>s+e.amount,0);
-  }));
-  [0,1,2,3,4,5,6].forEach(i=>{
-    const d=new Date(weekStart);d.setDate(d.getDate()+i);
-    const ds=d.toISOString().split('T')[0];
-    const v=entries.filter(e=>e.date===ds&&e.type==='credit').reduce((s,e)=>s+e.amount,0);
-    const h=Math.max(4,v/maxVal*80);
-    const col=v>=CFG.dailyTarget?'var(--green)':v>0?'var(--yellow)':'#2a2a2a';
-    const isToday=ds===s.today;
-    barsHtml+=`<div class="wday"><div class="wday-bar-bg" style="${isToday?'border:1px solid #444':''}"><div class="wday-bar-fill" style="height:${h}px;background:${col}"></div></div><div class="wday-lbl" style="color:${isToday?'var(--white)':'var(--gray)'}">${days[i]}</div></div>`;
-    amtsHtml+=`<div style="font-size:9px;font-weight:700;color:${col};width:28px;text-align:center">${v>0?'$'+v.toFixed(0):''}</div>`;
+  const days=['S','M','T','W','T','F','S'];
+  const wStart=new Date(s.ws+'T12:00:00');
+  const dayVals=[0,1,2,3,4,5,6].map(i=>{
+    const d=new Date(wStart);d.setDate(d.getDate()+i);
+    return entries.filter(e=>e.date===d.toISOString().split('T')[0]&&e.type==='credit').reduce((sum,e)=>sum+e.amount,0);
   });
-  document.getElementById('week-bars').innerHTML=barsHtml;
-  document.getElementById('week-bar-amts').innerHTML=amtsHtml;
+  const maxV=Math.max(CFG.dailyTarget,...dayVals,1);
+  document.getElementById('w-bars').innerHTML=[0,1,2,3,4,5,6].map(i=>{
+    const d=new Date(wStart);d.setDate(d.getDate()+i);
+    const ds=d.toISOString().split('T')[0];
+    const v=dayVals[i];
+    const h=Math.max(3,v/maxV*90);
+    const col=v>=CFG.dailyTarget?'var(--green)':v>0?'var(--yellow)':'#1e1e1e';
+    const isToday=ds===s.today;
+    return `<div style="display:flex;flex-direction:column;align-items:center;gap:3px;flex:1">
+      <div style="font-size:8px;font-weight:700;color:${col}">${v>0?'$'+Math.round(v):''}</div>
+      <div style="width:100%;max-width:32px;height:90px;background:#1a1a1a;border-radius:6px;display:flex;align-items:flex-end;overflow:hidden;${isToday?'outline:1px solid #333':''}">
+        <div style="width:100%;height:${h}px;background:${col};border-radius:6px;transition:height .8s"></div>
+      </div>
+      <div style="font-size:9px;color:${isToday?'var(--white)':'var(--gray)'};">${days[i]}</div>
+    </div>`;
+  }).join('');
 
   // ── MONTH ──
-  const monthName=new Date().toLocaleDateString('en',{month:'long',year:'numeric'});
-  document.getElementById('month-name').textContent=monthName+` · Day ${s.dayOfMonth} of ${s.daysInMonth}`;
-  const monthTarget=CFG.dailyTarget*s.daysInMonth;
-  const mPct=Math.min(s.mInc/monthTarget*100,100);
+  const mName=new Date().toLocaleDateString('en',{month:'long',year:'numeric'});
+  const mDay=new Date().getDate();
+  document.getElementById('m-name').textContent=`${mName} · Day ${mDay} of ${s.dim}`;
+  const mTarget=CFG.dailyTarget*s.dim;
+  const mPct=Math.min(s.mInc/mTarget*100,100);
   const mCol=mPct>=100?'var(--green)':mPct>=50?'var(--yellow)':'var(--red)';
-  document.getElementById('month-earned').textContent=fmt(s.mInc);
-  document.getElementById('month-earned').style.color=mCol;
-  document.getElementById('month-target-lbl').textContent=monthTarget.toFixed(0);
-  document.getElementById('month-pct-lbl').textContent=mPct.toFixed(0)+'%';
-  document.getElementById('month-pbar').style.width=mPct+'%';
-  document.getElementById('month-pbar').style.background=mCol;
-  const mBudgetPct=Math.min(s.mExp/CFG.monthlyBudget*100,100);
-  document.getElementById('month-budget-saved').textContent=(s.mBudgetSaved>=0?'':'-')+fmt(Math.abs(s.mBudgetSaved));
-  document.getElementById('month-budget-saved').style.color=s.mBudgetSaved>=0?'var(--gold)':'var(--red)';
-  document.getElementById('month-exp-lbl').textContent=fmt(s.mExp);
-  document.getElementById('month-budget-bar').style.width=mBudgetPct+'%';
-  document.getElementById('month-gross').textContent=fmt(s.mInc);
-  document.getElementById('month-tax').textContent=fmt(s.mTax);
-  document.getElementById('month-net-tax').textContent=fmt(s.mNat);
-  document.getElementById('month-net').textContent=fmt(s.mNs);
-  document.getElementById('month-net').style.color=s.mNs>=0?'var(--green)':'var(--red)';
-  document.getElementById('month-sad').textContent=fmt(s.mSad);
-  document.getElementById('month-days').textContent=`${s.dayOfMonth}/${s.daysInMonth}`;
+  set('m-earned',fmt(s.mInc),mCol);
+  document.getElementById('m-target-lbl').textContent=mTarget.toFixed(0);
+  document.getElementById('m-pct-lbl').textContent=mPct.toFixed(0)+'%';
+  setPbar('m-pbar',mPct,mCol);
+  const mBudSav=CFG.monthlyBudget-s.mExp;
+  set('m-budget-saved',(mBudSav>=0?'':'-')+fmt(Math.abs(mBudSav)),mBudSav>=0?'var(--gold)':'var(--red)');
+  set('m-exp-big',fmt(s.mExp),'var(--red)');
+  setPbar('m-budget-bar',Math.min(s.mExp/CFG.monthlyBudget*100,100),'var(--gold)');
+  set('m-gross',fmt(s.mInc),'var(--green)');
+  set('m-tax',fmt(s.mTax),'var(--red)');
+  set('m-nat',fmt(s.mNat),'var(--blue)');
+  set('m-net',fmt(s.mNs),s.mNs>=0?'var(--green)':'var(--red)');
+  set('m-sad',fmt(s.mSad,2),'var(--gold)');
+  document.getElementById('m-day').textContent=`${mDay}/${s.dim}`;
   // Expense breakdown
   const mExpMap={};
   entries.filter(e=>e.date>=s.ms&&e.type==='expense').forEach(e=>{const k=e.category||e.name;mExpMap[k]=(mExpMap[k]||0)+e.amount});
   const mExpArr=Object.entries(mExpMap).sort((a,b)=>b[1]-a[1]);
-  document.getElementById('month-exp-breakdown').innerHTML=mExpArr.length?mExpArr.map(([k,v])=>`
-    <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid #1a1a1a">
+  document.getElementById('m-exp-list').innerHTML=mExpArr.length?mExpArr.map(([k,v])=>`
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid #161616">
       <span style="font-size:12px">${k}</span>
       <div style="text-align:right">
-        <span style="font-size:13px;font-weight:700;color:var(--red)">${fmt(v)}</span>
-        <span style="font-size:10px;color:var(--gray);margin-left:6px">${(v/CFG.monthlyBudget*100).toFixed(0)}% of budget</span>
+        <span style="font-size:13px;font-weight:700;color:var(--red)">${fmt(v,2)}</span>
+        <span style="font-size:9px;color:var(--gray);margin-left:5px">${(v/CFG.monthlyBudget*100).toFixed(1)}%</span>
       </div>
-    </div>`).join(''):'<div style="color:var(--gray);font-size:12px;padding:10px 0">No expenses this month 🎉</div>';
+    </div>`).join(''):'<div style="color:var(--gray);font-size:11px;padding:8px 0">No expenses this month yet 🎉</div>';
+  // Save more tips
+  const tips=[];
+  if(mExpMap['Smoke']){tips.push({t:`🚬 Quit smoking → Save ${fmt(mExpMap['Smoke']*12)}/year!`,c:'var(--red)'})}
+  if(s.mExp>CFG.monthlyBudget*.5){tips.push({t:`⚠️ Already at ${(s.mExp/CFG.monthlyBudget*100).toFixed(0)}% of monthly budget — slow down spending!`,c:'var(--yellow)'})}
+  if(mExpMap['Food']||mExpMap['Grocery']){const f=(mExpMap['Food']||0)+(mExpMap['Grocery']||0);tips.push({t:`🛒 Meal prep at home → Could save $${(f*.3).toFixed(0)}/month!`,c:'var(--blue)'})}
+  tips.push({t:`💡 Every $100 saved from budget = 1 extra day closer to $30K goal!`,c:'var(--green)'});
+  document.getElementById('m-tips').innerHTML=tips.map(t=>`
+    <div class="tip-card" style="background:#161616;border-color:${t.c};margin-bottom:6px">
+      <div style="font-size:11px;color:var(--white)">${t.t}</div>
+    </div>`).join('');
 
-  // ── PROJECTIONS ──
-  document.getElementById('proj-year-net').textContent=fmt(s.pyn);
-  document.getElementById('proj-year-net').style.color=s.pyn>=CFG.savingsGoal?'var(--green)':'var(--red)';
-  document.getElementById('proj-year-sub').textContent=`Projected savings by Apr 1, 2027`;
-  document.getElementById('proj-goal-pct').textContent=s.gp.toFixed(1)+'%';
-  document.getElementById('proj-goal-bar').style.width=Math.min(100,s.gp)+'%';
-  document.getElementById('proj-goal-bar').style.background=s.on?'var(--green)':'var(--red)';
-  document.getElementById('goal-card').style.borderColor=s.on?'rgba(0,200,83,.3)':'rgba(255,23,68,.3)';
+  // ── CHARTS ──
+  const dailyMap={};
+  entries.forEach(e=>{
+    if(!dailyMap[e.date])dailyMap[e.date]={g:0,x:0};
+    if(e.type==='credit')dailyMap[e.date].g+=e.amount;
+    if(e.type==='expense')dailyMap[e.date].x+=e.amount;
+  });
+  const ds=Object.entries(dailyMap).sort((a,b)=>a[0].localeCompare(b[0]));
+  const dlabs=ds.map(([d])=>new Date(d+'T12:00:00').toLocaleDateString('en',{month:'short',day:'numeric'}));
+  const dgross=ds.map(([,v])=>v.g);
+  const dexp=ds.map(([,v])=>v.x);
+  // Cumulative savings
+  let cumSavings=0;
+  const cumArr=ds.map(([,v])=>{
+    const net=(v.g*(1-CFG.taxRate))-v.x;
+    cumSavings+=net;
+    return cumSavings;
+  });
+  // Destroy old
+  if(lineC)lineC.destroy();
+  if(savC)savC.destroy();
+  if(expC)expC.destroy();
+  const chartOpts={responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{color:'#555',font:{size:9}},grid:{color:'#1a1a1a'}},y:{ticks:{color:'#555',font:{size:9}},grid:{color:'#1a1a1a'}}}};
+  if(ds.length>0){
+    lineC=new Chart(document.getElementById('lineChart').getContext('2d'),{
+      type:'line',
+      data:{labels:dlabs,datasets:[
+        {label:'Earnings',data:dgross,borderColor:'#00e676',backgroundColor:'rgba(0,230,118,.08)',borderWidth:2,tension:.4,pointRadius:3,pointBackgroundColor:'#00e676',fill:true},
+        {label:'Expenses',data:dexp,borderColor:'#ff1744',backgroundColor:'rgba(255,23,68,.06)',borderWidth:2,tension:.4,pointRadius:3,pointBackgroundColor:'#ff1744',fill:true},
+        {label:'Target',data:Array(ds.length).fill(CFG.dailyTarget),borderColor:'#448aff',borderWidth:1,borderDash:[4,4],pointRadius:0,fill:false},
+      ]},options:{...chartOpts,plugins:{legend:{display:false}}}
+    });
+    savC=new Chart(document.getElementById('savingsChart').getContext('2d'),{
+      type:'line',
+      data:{labels:dlabs,datasets:[{
+        label:'Cumulative Savings',data:cumArr,
+        borderColor:cumSavings>=0?'#00e676':'#ff1744',
+        backgroundColor:cumSavings>=0?'rgba(0,230,118,.1)':'rgba(255,23,68,.1)',
+        borderWidth:2,tension:.4,fill:true,pointRadius:2
+      }]},
+      options:{...chartOpts,plugins:{legend:{display:false}}}
+    });
+    // Expense categories bar
+    const expMap={};
+    entries.filter(e=>e.type==='expense').forEach(e=>{const k=e.category||e.name;expMap[k]=(expMap[k]||0)+e.amount});
+    const expArr=Object.entries(expMap).sort((a,b)=>b[1]-a[1]);
+    expC=new Chart(document.getElementById('expChart').getContext('2d'),{
+      type:'bar',
+      data:{labels:expArr.map(([k])=>k),datasets:[{label:'Expenses',data:expArr.map(([,v])=>v),backgroundColor:PIE_C,borderRadius:6}]},
+      options:{...chartOpts,plugins:{legend:{display:false}}}
+    });
+  }
+  // Chart stats
+  const bestDay=dgross.length?Math.max(...dgross):0;
+  set('ch-best',fmt(bestDay),'var(--green)');
+  set('ch-avg',fmt(s.avg,2),'var(--blue)');
+  document.getElementById('ch-days').textContent=Object.keys(dailyMap).length;
+
+  // ── FORECAST ──
+  set('p-yearnet',fmt(s.pyn),s.pyn>=CFG.savingsGoal?'var(--green)':'var(--red)');
+  document.getElementById('p-goal-pct').textContent=s.gp.toFixed(1)+'%';
+  setPbar('p-goal-bar',s.gp,s.on?'var(--green)':'var(--red)');
+  document.getElementById('goal-card').style.borderColor=s.on?'rgba(0,230,118,.2)':'rgba(255,23,68,.2)';
   document.getElementById('goal-emoji').textContent=s.on?'🎯':'⚠️';
-  const verdict=document.getElementById('proj-verdict');
-  verdict.textContent=s.on?'✅ ON TRACK TO HIT $30,000!':'⚠️ NEED MORE — Increase daily earnings';
-  verdict.style.background=s.on?'rgba(0,200,83,.15)':'rgba(255,23,68,.15)';
-  verdict.style.color=s.on?'var(--green)':'var(--red)';
-  document.getElementById('days-to-goal').textContent=s.daysToGoal<999?`~${s.daysToGoal}d`:'Keep going!';
-  document.getElementById('days-rem').textContent=s.rm+'d';
-  document.getElementById('adj-target').textContent=fmt(s.adj);
-  document.getElementById('avg-daily').textContent=fmt(s.avg);
-  document.getElementById('proj-wg').textContent=fmt(s.pwg);
-  document.getElementById('proj-wn').textContent=fmt(s.pwn);
-  document.getElementById('proj-wn').style.color=s.pwn>=0?'var(--green)':'var(--red)';
-  document.getElementById('proj-mg').textContent=fmt(s.pmg);
-  document.getElementById('proj-mn').textContent=fmt(s.pmn);
-  document.getElementById('proj-mn').style.color=s.pmn>=0?'var(--green)':'var(--red)';
-  document.getElementById('proj-yg').textContent=fmt(s.pyg);
-  document.getElementById('proj-yn').textContent=fmt(s.pyn);
-  document.getElementById('proj-yn').style.color=s.pyn>=CFG.savingsGoal?'var(--green)':'var(--red)';
-  document.getElementById('loan-pct-lbl').textContent=s.lop.toFixed(0)+'% cleared';
-  document.getElementById('loan-pbar').style.width=s.lop+'%';
-  document.getElementById('loan-paid-lbl').textContent=fmt(s.lp)+' paid';
-  document.getElementById('loan-rem-lbl').textContent=fmt(s.lr)+' left';
-  document.getElementById('total-sadaqah').textContent=fmt(s.sad);
-  document.getElementById('ann-sadaqah').textContent=fmt(s.as);
+  const v=document.getElementById('p-verdict');
+  v.textContent=s.on?'✅ ON TRACK TO HIT $30,000!':'⚠️ Keep earning — you need more daily!';
+  v.style.background=s.on?'rgba(0,230,118,.12)':'rgba(255,23,68,.12)';
+  v.style.color=s.on?'var(--green)':'var(--red)';
+  document.getElementById('p-days2goal').textContent=s.d2g<999?`~${s.d2g}d`:'Earn more!';
+  document.getElementById('p-daysrem').textContent=s.rm+'d';
+  set('p-adj',fmt(s.adj,2),'var(--purple)');
+  set('p-avg',fmt(s.avg,2),'var(--green)');
+  set('p-wg',fmt(s.pwg,0),'var(--green)');
+  set('p-wn',fmt(s.pwn,0),s.pwn>=0?'var(--green)':'var(--red)');
+  set('p-mg',fmt(s.pmg,0),'var(--green)');
+  set('p-mn',fmt(s.pmn,0),s.pmn>=0?'var(--green)':'var(--red)');
+  set('p-yg',fmt(s.pyg,0),'var(--green)');
+  set('p-yn',fmt(s.pyn,0),s.pyn>=CFG.savingsGoal?'var(--green)':'var(--red)');
+  document.getElementById('p-loan-pct').textContent=s.lop.toFixed(0)+'% cleared';
+  setPbar('p-loan-bar',s.lop,'var(--orange)');
+  document.getElementById('p-loan-paid').textContent=fmt(s.lp)+' paid';
+  document.getElementById('p-loan-rem').textContent=fmt(s.lr)+' left';
+  set('p-sad-total',fmt(s.sad,2),'var(--gold)');
+  set('p-sad-ann',fmt(s.as,0),'var(--gold)');
 
-  // Recent entries for log page
-  const recent=[...entries].reverse().slice(0,15);
-  document.getElementById('recent-list').innerHTML=recent.map(e=>{
+  // Recent log
+  const rec=[...entries].reverse().slice(0,20);
+  document.getElementById('recent-list').innerHTML=rec.map(e=>{
     const tm=TM[e.type]||TM.credit;
-    return `<div class="erow">
-      <div class="eicon" style="background:${tm.color}22">${tm.icon}</div>
-      <div class="einfo"><div class="ename">${e.name}</div><div class="etime">${e.date} · ${tm.label}</div></div>
-      <div style="text-align:right">
-        <div class="eamt" style="color:${tm.color}">${e.type==='expense'?'-':''}${fmt(e.amount)}</div>
-        <button class="delbtn" onclick="delE('${e.id}')">🗑</button>
-      </div></div>`;
+    return `<div class="erow"><div class="eicon" style="background:${tm.color}18">${tm.icon}</div>
+    <div class="einfo"><div class="ename">${e.name}</div><div class="etime">${e.date} · ${tm.label}</div></div>
+    <div style="text-align:right"><div class="eamt" style="color:${tm.color}">${e.type==='expense'?'-':''}${fmt(e.amount,2)}</div>
+    <button class="delbtn" onclick="delE('${e.id}')">🗑 del</button></div></div>`;
   }).join('');
 }
 
-// NAV
+function set(id,val,col){const el=document.getElementById(id);if(el){el.textContent=val;if(col)el.style.color=col}}
+function setPbar(id,pct,col){const el=document.getElementById(id);if(el){el.style.width=Math.min(100,Math.max(0,pct))+'%';if(col)el.style.background=col}}
+
 function go(p){
-  ['today','week','month','proj','log'].forEach(x=>{
-    document.getElementById('p-'+x).classList.remove('on');
+  ['today','week','month','chart','proj','log'].forEach(x=>{
+    const pg=document.getElementById('p-'+x);
     const nb=document.getElementById('nb-'+x);
-    if(nb){nb.querySelector('.nl').style.color='var(--gray)'}
+    if(pg)pg.classList.remove('on');
+    if(nb)nb.classList.remove('on');
   });
-  document.getElementById('p-'+p).classList.add('on');
-  const nb=document.getElementById('nb-'+p);
-  if(nb){
-    const cols={today:'var(--green)',week:'var(--blue)',month:'var(--gold)',proj:'var(--purple)',log:'var(--green)'};
-    nb.querySelector('.nl').style.color=cols[p]||'var(--green)';
-  }
+  document.getElementById('p-'+p)?.classList.add('on');
+  document.getElementById('nb-'+p)?.classList.add('on');
   window.scrollTo(0,0);
 }
 
-// FORM
+// Form
 let curT='credit';
-const TCOLORS={credit:'var(--green)',expense:'var(--red)',loan_payment:'var(--orange)',debt_payment:'var(--yellow)'};
+const TC={credit:'var(--green)',expense:'var(--red)',loan_payment:'var(--orange)',debt_payment:'var(--yellow)'};
 function setT(t){
   curT=t;
   ['credit','expense','loan_payment','debt_payment'].forEach(x=>{
     const b=document.getElementById('t-'+x);
-    if(x===t){b.style.borderColor=TCOLORS[t];b.style.color=TCOLORS[t];b.style.background=`${TCOLORS[t]}`.replace('var(--','rgba(').replace(')',',0.1)')}
-    else{b.style.borderColor='#2a2a2a';b.style.color='var(--gray)';b.style.background='transparent'}
+    if(!b)return;
+    if(x===t){b.style.borderColor=TC[t];b.style.color=TC[t];b.style.background=TC[t].replace('var(--','rgba(').replace(')',',0.08)')}
+    else{b.style.borderColor='#222';b.style.color='var(--gray)';b.style.background='transparent'}
   });
   document.getElementById('cat-wrap').style.display=t==='expense'?'block':'none';
 }
 document.getElementById('cat-grid').innerHTML=CATS.map(c=>`<button class="cbtn" onclick="selC('${c}',this)">${c}</button>`).join('');
-function selC(c,b){document.querySelectorAll('.cbtn').forEach(x=>{x.style.borderColor='#2a2a2a';x.style.color='var(--gray)';x.style.background='transparent'});b.style.borderColor='var(--orange)';b.style.color='var(--orange)';b.style.background='rgba(255,109,0,.1)';document.getElementById('fn').value=c}
-
+function selC(c,b){
+  document.querySelectorAll('.cbtn').forEach(x=>{x.style.cssText='';});
+  b.style.borderColor='var(--orange)';b.style.color='var(--orange)';b.style.background='rgba(255,109,0,.1)';
+  document.getElementById('fn').value=c;
+}
 function saveE(){
   const d=document.getElementById('fd').value;
   const a=parseFloat(document.getElementById('fa').value);
   const n=document.getElementById('fn').value.trim();
   const nt=document.getElementById('fnt').value.trim();
   const cat=document.querySelector('.cbtn[style*="orange"]')?.textContent||'';
-  if(!d||!n||isNaN(a)||a<=0){toast('Fill date, name and amount ⚠️','var(--red)');return}
+  if(!d||!n||isNaN(a)||a<=0){toast('Please fill date, name & amount ⚠️');return}
   entries.push({id:Date.now().toString(),date:d,type:curT,name:n,category:cat,amount:a,note:nt});
   entries.sort((a,b)=>a.date.localeCompare(b.date));
   savE();render();
-  document.getElementById('fa').value='';document.getElementById('fn').value='';document.getElementById('fnt').value='';
-  document.querySelectorAll('.cbtn').forEach(x=>{x.style.borderColor='#2a2a2a';x.style.color='var(--gray)';x.style.background='transparent'});
-  toast(`✅ ${n} ${fmt(a)} saved!`,'var(--green)');
+  document.getElementById('fa').value='';
+  document.getElementById('fn').value='';
+  document.getElementById('fnt').value='';
+  document.querySelectorAll('.cbtn').forEach(x=>x.style.cssText='');
+  toast(`✅ ${n} ${fmt(a,2)} saved!`,'#00e676');
   go('today');
 }
-function delE(id){if(!confirm('Remove?'))return;entries=entries.filter(e=>e.id!==id);savE();render();toast('Removed','var(--yellow)')}
-function toast(msg,c='var(--green)'){const t=document.getElementById('toast');t.textContent=msg;t.style.background=c.includes('var')?c:'var(--green)';t.style.color=c==='var(--yellow)'?'#000':'#fff';t.style.opacity='1';setTimeout(()=>t.style.opacity='0',2500)}
+function delE(id){
+  if(!confirm('Remove this entry?'))return;
+  entries=entries.filter(e=>e.id!==id);
+  savE();render();
+  toast('Entry removed','#ffd600');
+}
+function toast(msg,c='#00e676'){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.style.background=c;
+  t.style.color=c==='#ffd600'||c==='var(--gold)'?'#000':'#000';
+  t.style.opacity='1';
+  setTimeout(()=>t.style.opacity='0',2500);
+}
 
 document.getElementById('fd').value=new Date().toISOString().split('T')[0];
 load();render();
